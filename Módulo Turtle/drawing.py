@@ -1,19 +1,19 @@
 import turtle
-import math
+
 
 
 brush = turtle.Turtle()
 
 
-def drawPetal(t, radius, angle):# O angle indica o ângulo da pétala
+def drawPetal(t, radius, angle):
     
     for i in range(2):
         t.circle(radius, angle)
         t.lt(180-angle)
 
-def drawFlower(t, numberPetals, radious, angle):
+def drawFlower(t, numberPetals, radius, angle):
     for i in range(numberPetals):
-        drawPetal(t, radious, angle)
+        drawPetal(t, radius, angle)
         t.lt(360.0/numberPetals)
 
 def drawTriangle(t, length):
@@ -29,6 +29,7 @@ def drawTriangleFlower(t, numberTriangles, length):
 
 
 def flower1():
+    brush.speed(10)
     turtle.bgcolor('black')#deixa o fundo preto
     brush.color('red')
     drawFlower(brush, 10, 200, 90)
