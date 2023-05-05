@@ -1,0 +1,50 @@
+import os
+import booking.constants as const
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+driver = webdriver.Chrome
+
+
+class Booking(webdriver.Chrome):
+    def __init__(self, driver_path=r"/usr/local/bin", teardown=False):
+        self.driver_path = driver_path
+        self.teardown = teardown
+        os.environ['PATH'] += self.driver_path
+        super(Booking, self).__init__()
+        self.implicitly_wait(15)
+        self.maximize_window()
+
+    def land_first_page(self):
+        self.get(const.BASE_URL + const.QUERY_STRING)
+        #fecha popup se, aparecer
+        #Encontra popup em portugues
+        #self.close_popup(css_selector='button[aria-label="Ignorar informações de login."]')
+        #Encontra popup em ingles
+        self.close_popup(css_selector='button[aria-label="Dismiss sign-in info."]')
+
+
+
+    def close_popup(self, css_selector):
+        try:
+            popup = self.find_element(By.CSS_SELECTOR, css_selector)
+            popup.click()
+            return True
+        except:
+            return False
+        
+
+    def select_place_to_go(self, place_to_go):
+        search_field = self.find_element(By.NAME, 'ss')
+        search_field.clear()
+        search_field.send_keys(place_to_go)
+        
+    def select_checkin_checkout(self, checkin = None, checkout = None):
+        calendar = self.find_element(By.CSS_SELECTOR, 'div[data-testid="searchbox-dates-container"]')
+        calendar.click()
+
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.teardown:
+            self.quit()
