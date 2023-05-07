@@ -2,6 +2,8 @@ import os
 import booking.constants as const
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from booking.booking_report import BookingReport
+from prettytable import PrettyTable
 
 driver = webdriver.Chrome
 
@@ -53,6 +55,15 @@ class Booking(webdriver.Chrome):
     def search(self):
         search_button = self.find_element(By.XPATH, "//button[.//span[text()='Search']]")
         search_button.click()
+
+    def report_results(self):
+        hotel_cards = self.find_elements(By.CSS_SELECTOR, 'div[data-testid="property-card"]')
+        report = BookingReport(hotel_cards)
+        table =PrettyTable(
+            field_names=['Hotel Name', 'Hotel Price', 'Hotel Score']
+        )
+        table.add_rows(report.pull_deal_box_attributes())
+        print(table)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.teardown:
