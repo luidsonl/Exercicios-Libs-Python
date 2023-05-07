@@ -43,7 +43,17 @@ class Booking(webdriver.Chrome):
     def select_checkin_checkout(self, checkin = None, checkout = None):
         calendar = self.find_element(By.CSS_SELECTOR, 'div[data-testid="searchbox-dates-container"]')
         calendar.click()
+        
+        checkin_date = self.find_element(By.CSS_SELECTOR, f'span[data-date="{checkin}"]')
+        checkin_date.click()
 
+        checkout_date = self.find_element(By.CSS_SELECTOR, f'span[data-date="{checkout}"]')
+        checkout_date.click()
+
+
+    def search(self):
+        search_button = self.find_element(By.XPATH, "//button[.//span[text()='Search']]")
+        search_button.click()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.teardown:
