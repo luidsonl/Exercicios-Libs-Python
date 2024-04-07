@@ -6,8 +6,8 @@ import pandas as pd
 import os
 
 ## Define algumas variáveis importantes
-URL_COLUMN = 'url'
-QUERY_COLUMN = 'texto'
+URL_COLUMN = 'URL'
+QUERY_COLUMN = 'HTML'
 DATABASE_DIRECTORY = 'entrada'
 
 ## Define algumas funções convenientes
@@ -36,13 +36,19 @@ for file in files:
 final_list = []
 url = ''
 response = ''
+counter = 0
 
 for df in df_list:
+    df_length = df.shape[0]
     for index, row in df.iterrows():
 
         if url != row[URL_COLUMN]:
             url = row[URL_COLUMN]
-            response = requests.get(url)
+            try:
+                response = requests.get(url)
+            except:
+                 print("Erro ao encontrar url", url)
+                 continue
         
         found = False
 
@@ -55,6 +61,12 @@ for df in df_list:
             'found': found,
             'status_code': response.status_code
         })
+        counter = counter + 1
+        print('Processado', counter, 'de', df_length, 'urls')
+        if found:
+             print(row[QUERY_COLUMN], "  Encontrado em  ", row[URL_COLUMN])
+        else:
+            print(row[QUERY_COLUMN], "  NÃO encontrado em  ", row[URL_COLUMN])
 
 final_df = pd.DataFrame(final_list)
 
