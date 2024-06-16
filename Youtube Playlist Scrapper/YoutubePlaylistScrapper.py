@@ -21,7 +21,8 @@ class YoutubePlaylistScrapper:
             return ''
         
     def __get_playlist_duration(self, html: str):
-        pattern = r'"simpleText":"(\d+:\d+)"},"navigationEndpoint"'
+        pattern = r'"simpleText":"(\d{1,2}:\d{2}(?::\d{2})?)"},"navigationEndpoint"'
+
         durations = re.findall(pattern, html)
 
         return self.__sum_durations(durations)
